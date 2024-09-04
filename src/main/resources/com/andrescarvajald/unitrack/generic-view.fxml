@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.BoxBlur?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
+
+<HBox fx:id="hBox" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.andrescarvajald.unitrack.controllers.GenericView">
+   <children>
+      <ImageView fx:id="imageView" fitHeight="290.0" fitWidth="508.0" pickOnBounds="true" preserveRatio="true" smooth="false" HBox.hgrow="ALWAYS">
+         <image>
+            <Image url="@images/logo-unitropico-01.png" />
+         </image>
+      </ImageView>
+   </children>
+   <effect>
+      <BoxBlur />
+   </effect>
+</HBox>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.effect.BoxBlur?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="900.0" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.andrescarvajald.unitrack.controllers.DashboardView">
+   <top>
+      <HBox alignment="CENTER_LEFT" prefHeight="70.0" prefWidth="900.0" styleClass="bg-primary-color">
+         <children>
+            <Label alignment="CENTER" prefHeight="30.0" text="UniTrack">
+               <styleClass>
+                  <String fx:value="text-extra-large" />
+                  <String fx:value="text-bold" />
+                  <String fx:value="text-fill-secondary" />
+               </styleClass>
+               <padding>
+                  <Insets left="10.0" />
+               </padding>
+            </Label>
+            <HBox prefHeight="50.0" prefWidth="200.0" HBox.hgrow="ALWAYS" />
+            <ImageView cache="true" fitHeight="60.0" fitWidth="117.0" focusTraversable="true" nodeOrientation="RIGHT_TO_LEFT" pickOnBounds="true" preserveRatio="true" smooth="false">
+               <image>
+                  <Image url="@images/escudo-unitropico_1.png" />
+               </image>
+               <HBox.margin>
+                  <Insets right="10.0" />
+               </HBox.margin>
+            </ImageView>
+         </children>
+      </HBox>
+   </top>
+
+   <left>
+      <VBox prefWidth="211.0" styleClass="side-menu" BorderPane.alignment="CENTER">
+         <children>
+            <Button fx:id="studentsButton" mnemonicParsing="false" onAction="#handleClicks" prefWidth="198.0" styleClass="side-menu-item" text="Estudiantes" />
+            <Button fx:id="subjectsButton" mnemonicParsing="false" onAction="#handleClicks" prefHeight="46.0" prefWidth="198.0" styleClass="side-menu-item" text="Materias" VBox.vgrow="ALWAYS" />
+            <Button fx:id="studentsLosingSubjectsButton" mnemonicParsing="false" onAction="#handleClicks" prefHeight="46.0" prefWidth="198.0" styleClass="side-menu-item" text="Estudiantes M.Perdidas" VBox.vgrow="ALWAYS" />
+            <Button fx:id="filterStudentButton" mnemonicParsing="false" onAction="#handleClicks" prefHeight="46.0" prefWidth="198.0" styleClass="side-menu-item" text="Filtrar Estudiante" VBox.vgrow="ALWAYS" />
+         </children></VBox>
+   </left>
+
+   <center>
+
+   </center>
+</BorderPane>
