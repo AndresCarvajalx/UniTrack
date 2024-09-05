@@ -19,6 +19,6 @@ module com.andrescarvajald.unitrack {
     opens com.andrescarvajald.unitrack.controllers to javafx.fxml;
     exports com.andrescarvajald.unitrack.controllers;
 
-    opens com.andrescarvajald.unitrack.api.entities to com.fasterxml.jackson.databind;
-    exports com.andrescarvajald.unitrack.api.entities;
+    exports com.andrescarvajald.unitrack.model;
+    opens com.andrescarvajald.unitrack.model to com.fasterxml.jackson.databind;
 }
