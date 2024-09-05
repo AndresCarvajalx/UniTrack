@@ -1,10 +1,10 @@
-package com.andrescarvajald.unitrack.api.entities;
+package com.andrescarvajald.unitrack.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class StudentLosingSubjects {
     private @JsonProperty("estudianteId") int studentId;
-    private int cedula;
+    private Long cedula;
     private @JsonProperty("estudianteNombre") String studentName;
     private @JsonProperty("estudianteApellido") String studentLastName;
     private @JsonProperty("semestreNivel") int semester;
@@ -17,7 +17,7 @@ public class StudentLosingSubjects {
 
     public StudentLosingSubjects(
             int studentID,
-            int cedula,
+            Long cedula,
             String jornada,
             String estado,
             String studentName,
@@ -27,7 +27,6 @@ public class StudentLosingSubjects {
             Long losingTimes
     ) {
         this.studentId = studentID;
-        // TODO CHANGE CEDULA TYPE TO LONG
         this.cedula = cedula;
         this.studentName = studentName;
         this.studentLastName = studentLastName;
@@ -86,11 +85,11 @@ public class StudentLosingSubjects {
         this.losingTimes = losingTimes;
     }
 
-    public int getCedula() {
+    public Long getCedula() {
         return cedula;
     }
 
-    public void setCedula(int cedula) {
+    public void setCedula(Long cedula) {
         this.cedula = cedula;
     }
 
@@ -109,5 +108,4 @@ public class StudentLosingSubjects {
     public void setEstado(String estado) {
         this.estado = estado;
     }
-
 }
