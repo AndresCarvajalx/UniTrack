@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.Cursor?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -13,7 +14,10 @@
         <HBox alignment="CENTER" spacing="30.0">
             <children>
                 <TextField id="textField" fx:id="textField" prefHeight="26.0" prefWidth="337.0" promptText="Cedula..." />
-                <Button id="searchButton" fx:id="searchBtn" mnemonicParsing="false" onAction="#handleClicks" styleClass="bg-secondary-color" />
+                <Button id="searchButton" fx:id="searchBtn" mnemonicParsing="false" onAction="#handleClicks" styleClass="bg-secondary-color">
+               <cursor>
+                  <Cursor fx:constant="HAND" />
+               </cursor></Button>
             </children>
             <VBox.margin>
                 <Insets />
