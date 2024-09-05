@@ -53,4 +53,28 @@ public class API<T> implements IAPI<T> {
             return null;
         }
     }
+
+    @Override
+    public void update(String endpoint, T t) {
+        String url = PATH + endpoint;
+        try {
+            String requestBody = mapper.writeValueAsString(t);
+            HttpRequest req = request
+                    .uri(URI.create(url))
+                    .header("Content-Type", "application/json")
+                    .PUT(HttpRequest.BodyPublishers.ofString(requestBody))
+                    .build();
+
+            HttpResponse<String> res = client.send(req, HttpResponse.BodyHandlers.ofString());
+
+            if (res.statusCode() == 200) {
+                System.out.println("Actualización exitosa: " + res.body());
+            } else {
+                throw new RuntimeException("Error al actualizar: " + res.statusCode());
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error durante la actualización", e);
+        }
+    }
 }
