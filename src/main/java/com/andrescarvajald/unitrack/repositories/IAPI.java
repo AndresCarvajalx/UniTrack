@@ -1,4 +1,4 @@
-package com.andrescarvajald.unitrack.api;
+package com.andrescarvajald.unitrack.repositories;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 

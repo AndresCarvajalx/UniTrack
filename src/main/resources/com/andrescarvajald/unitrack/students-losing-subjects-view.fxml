@@ -8,6 +8,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import org.controlsfx.control.PrefixSelectionComboBox?>
 
 <VBox stylesheets="@styles.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.andrescarvajald.unitrack.controllers.StudentLosingSubjectsView">
     <children>
@@ -18,6 +19,12 @@
                <cursor>
                   <Cursor fx:constant="HAND" />
                </cursor></Button>
+            <HBox alignment="CENTER_RIGHT" prefHeight="26.0" prefWidth="222.0">
+               <children>
+                  <Button fx:id="generateReportBtn" mnemonicParsing="false" onAction="#handleClicks" styleClass="bg-tertiary-color" text="Generar Reporte" />
+                  <PrefixSelectionComboBox fx:id="comboBox" nodeOrientation="LEFT_TO_RIGHT" prefHeight="26.0" prefWidth="94.0" promptText="Semestre" />
+               </children>
+            </HBox>
             </children>
             <VBox.margin>
                 <Insets />

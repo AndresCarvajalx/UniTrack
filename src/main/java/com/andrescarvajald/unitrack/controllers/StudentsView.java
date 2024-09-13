@@ -4,6 +4,7 @@ import com.andrescarvajald.unitrack.model.Student;
 import com.andrescarvajald.unitrack.model.StudentLosingSubjects;
 import com.andrescarvajald.unitrack.services.StudentLosingSubjectService;
 import com.andrescarvajald.unitrack.services.StudentService;
+import com.andrescarvajald.unitrack.util.Colors;
 import com.andrescarvajald.unitrack.util.SetButtonIcon;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -28,7 +29,11 @@ public class StudentsView implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        SetButtonIcon.set(editBtn, FontAwesomeSolid.EDIT, "#00594E");
+        SetButtonIcon.set(editBtn, FontAwesomeSolid.EDIT, Colors.PRIMARY);
+        initTable();
+    }
+
+    private void initTable() {
         idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         cedulaColumn.setCellValueFactory(new PropertyValueFactory<>("cedula"));
