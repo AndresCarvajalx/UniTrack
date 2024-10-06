@@ -56,6 +56,30 @@ public class API<T> implements IAPI<T> {
     }
 
     @Override
+    public void add(String endpoint, T t) {
+        String url = PATH + endpoint;
+        try {
+            String requestBody = mapper.writeValueAsString(t);
+            HttpRequest req = request
+                    .uri(URI.create(url))
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(requestBody))
+                    .build();
+
+            HttpResponse<String> res = client.send(req, HttpResponse.BodyHandlers.ofString());
+
+            if (res.statusCode() == 200) {
+                System.out.println("Se agrego de manera exitosa: " + res.body());
+            } else {
+                throw new RuntimeException("Error al agregar: " + res.statusCode());
+            }
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+            throw new RuntimeException("Error durante la actualización", e);
+        }
+    }
+
+    @Override
     public void update(String endpoint, T t) {
         String url = PATH + endpoint;
         try {

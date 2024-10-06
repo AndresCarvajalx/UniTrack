@@ -18,4 +18,8 @@ public class SubjectService {
     public void update(Integer id, Subject subject) {
         api.update(path + id, subject);
     }
+
+    public void add(Subject subject) {
+        api.add(path, subject);
+    }
 }

@@ -34,6 +34,7 @@ public class DashboardView implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        Main.stage.setResizable(true);
         root.setOnKeyPressed((key) -> {
             if(key.getCode() == KeyCode.ESCAPE) {
                 try {

@@ -18,6 +18,10 @@ fontFace {
     -fx-background-color: #B5A160;
 }
 
+.button:hover {
+    -fx-background-color: rgba(181, 161, 96, 0.73);
+}
+
 .bg-tertiary-color {
     -fx-background-color: #cadcda;
 }

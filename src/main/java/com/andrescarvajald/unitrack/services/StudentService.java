@@ -20,4 +20,8 @@ public class StudentService {
     public void update(Integer id, Student student) {
         api.update(path + id, student);
     }
+
+    public void add(Student student) {
+        api.add(path, student);
+    }
 }

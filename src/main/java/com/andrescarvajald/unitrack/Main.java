@@ -13,11 +13,9 @@ public class Main extends Application {
     @Override
     public void start(Stage st) throws IOException {
         stage = st;
-        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("dashboard-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(Main.class.getResource("open-file-view.fxml"));
         Scene scene = new Scene(fxmlLoader.load());
-        stage.setResizable(true);
-        stage.setMinHeight(500.);
-        stage.setMinWidth(1000.);
+        stage.setResizable(false);
         stage.setScene(scene);
         stage.show();
     }

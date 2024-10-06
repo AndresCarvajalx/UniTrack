@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.String?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+
+<VBox alignment="CENTER" prefHeight="291.0" prefWidth="339.0" spacing="10.0" styleClass="bg-primary-color" stylesheets="@styles.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.andrescarvajald.unitrack.controllers.OpenFileView">
+   <children>
+      <Label fx:id="fileNameLabel" style="-fx-text-fill: white;" styleClass="text-bold" text="Label" />
+      <Button fx:id="openFileButton" mnemonicParsing="false" onAction="#handleClicks" text="Abrir Archivo">
+         <styleClass>
+            <String fx:value="bg-secondary-color" />
+            <String fx:value="focus-indicator" />
+         </styleClass>
+      </Button>
+      <Button fx:id="continueButton" disable="true" mnemonicParsing="false" onAction="#handleClicks" text="Continuar">
+         <styleClass>
+            <String fx:value="bg-tertiary-color" />
+            <String fx:value="focus-indicator" />
+         </styleClass>
+      </Button>
+   </children>
+</VBox>
