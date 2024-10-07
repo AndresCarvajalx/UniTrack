@@ -135,8 +135,6 @@ public class OpenFileView implements Initializable {
                             System.out.println("ESTADO  " + estado);
                             String notaStr = subjectData.replaceAll("[^0-9.]", "").trim();
                             System.out.println("NOTA  " + notaStr);
-                            // Obtener la materia desde el servicio
-                            System.out.println(nombreMateria.replaceAll(" ", "-"));
 
                             Subject subject = subjectList.stream()
                                     .filter(s -> s.getName().equalsIgnoreCase(nombreMateria))
@@ -164,8 +162,8 @@ public class OpenFileView implements Initializable {
                             } else {
                                 System.out.println("Materia no encontrada: " + nombreMateria);
                             }
+                            historialService.add(historial);
                         }
-                        historialService.add(historial);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
