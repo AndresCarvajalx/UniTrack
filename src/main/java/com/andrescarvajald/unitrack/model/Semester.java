@@ -3,10 +3,8 @@ package com.andrescarvajald.unitrack.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class Semester {
-
-    @JsonProperty("semestre_id")
     private int id;
-    @JsonProperty("nombres")
+    @JsonProperty("estudiante")
     private Student student;
     private int nivel;
     private String periodo;
@@ -15,6 +13,18 @@ public class Semester {
     private int cantidadAsignaturas;
     private int cantidadCreditos;
 
+    public Semester() {}
+
+    public Semester(int id, Student student, int nivel, String periodo, Double promedioPeriodo, Double promedioFinal, int cantidadAsignaturas, int cantidadCreditos) {
+        this.id = id;
+        this.student = student;
+        this.nivel = nivel;
+        this.periodo = periodo;
+        this.promedioPeriodo = promedioPeriodo;
+        this.promedioFinal = promedioFinal;
+        this.cantidadAsignaturas = cantidadAsignaturas;
+        this.cantidadCreditos = cantidadCreditos;
+    }
 
     public int getId() {
         return id;

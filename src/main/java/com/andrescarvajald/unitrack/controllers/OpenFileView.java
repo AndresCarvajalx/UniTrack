@@ -1,12 +1,11 @@
 package com.andrescarvajald.unitrack.controllers;
 
 import com.andrescarvajald.unitrack.Main;
+import com.andrescarvajald.unitrack.model.Historial;
 import com.andrescarvajald.unitrack.model.Semester;
 import com.andrescarvajald.unitrack.model.Student;
 import com.andrescarvajald.unitrack.model.Subject;
-import com.andrescarvajald.unitrack.services.ExcelService;
-import com.andrescarvajald.unitrack.services.StudentService;
-import com.andrescarvajald.unitrack.services.SubjectService;
+import com.andrescarvajald.unitrack.services.*;
 import com.andrescarvajald.unitrack.util.RomanNumeralParser;
 import javafx.application.Platform;
 import javafx.concurrent.Task;
@@ -24,9 +23,13 @@ import javafx.stage.FileChooser;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.stream.Stream;
 
 public class OpenFileView implements Initializable {
     @FXML
@@ -41,6 +44,8 @@ public class OpenFileView implements Initializable {
     private final ExcelService excelService = new ExcelService();
     private final SubjectService subjectService = new SubjectService();
     private final StudentService studentService = new StudentService();
+    private final SemesterService semesterService = new SemesterService();
+    private final HistorialService historialService = new HistorialService();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -82,75 +87,86 @@ public class OpenFileView implements Initializable {
                         System.out.println("Materia creada: " + nombreMateria);
                         subjectService.add(materia);
                     }
-                    for (int i = 1; i < excelService.getRowCount(); i++) {
+                    List<Subject> subjectList = new ArrayList<>(subjectService.get());
 
+                    for (int i = 1; i < excelService.getRowCount(); i++) { // Bucle para cada estudiante
+                        // Obtener datos del estudiante
                         String nombres = excelService.getCellData(i, 0);    // Columna 0: Nombres
                         String apellidos = excelService.getCellData(i, 1);  // Columna 1: Apellidos
                         long cedula = Long.parseLong(excelService.getCellData(i, 2));   // Columna 2: Cédula
                         String jornada = excelService.getCellData(i, 3);    // Columna 3: Jornada
                         int nivel = RomanNumeralParser.romanToInt(excelService.getCellData(i, 4));  // Columna 4: Nivel
                         String periodo = excelService.getCellData(i, 5);    // Columna 5: Período
-                        //int cantidadAsignaturas = Integer.parseInt(excelService.getCellData(i, 6));  // Columna 6
-                        //int cantidadCreditos = Integer.parseInt(excelService.getCellData(i, 7));     // Columna 7
-                        //double promedioPeriodo = Double.parseDouble(excelService.getCellData(i, 8)); // Columna 8
-                        //double promedioFinal = Double.parseDouble(excelService.getCellData(i, 9));   // Columna 9
+                        int cantidadAsignaturas = (int) Double.parseDouble(excelService.getCellData(i, 6));  // Columna 6
+                        int cantidadCreditos = (int) Double.parseDouble(excelService.getCellData(i, 7));     // Columna 7
+                        String promedioProAux = excelService.getCellData(i, 8);
+                        if(promedioProAux.isEmpty()) {
+                            promedioProAux = "0.0";
+                        }
+                        double promedioPeriodo = Double.parseDouble(promedioProAux); // Columna 8
+                        double promedioFinal = Double.parseDouble(excelService.getCellData(i, 9));   // Columna 9
 
                         // Crear el objeto Student
-                        Student student = new Student(0, nombres, apellidos, cedula, jornada, "ACTIVO");
-
-                        // Crear el objeto Semestre
-                        Semester semestre = new Semester();
-                        semestre.setStudent(student);
-                        semestre.setNivel(nivel);
-                        semestre.setPeriodo(periodo);
-                        //semestre.setCantidadAsignaturas(cantidadAsignaturas);
-                        //semestre.setCantidadCreditos(cantidadCreditos);
-                        //semestre.setPromedioPeriodo(promedioPeriodo);
-                        //semestre.setPromedioFinal(promedioFinal);
+                        Student student = new Student(-1, nombres, apellidos, cedula, jornada, "ACTIVO");
                         studentService.add(student);
-                        // Procesar las materias y las notas
-//                    List<Historial> historiales = new ArrayList<>();
-//                    for (int j = 10; j < excelService.getColumnCount(); j++) {  // Columna 10 en adelante son las materias
-//                        String nombreMateria = excelService.getCellData(0, j);  // Fila 0: nombres de materias
-//                        double nota = Double.parseDouble(excelService.getCellData(i, j)); // Fila i: nota de la materia
-//
-//                        // Crear el objeto Subject (Materia)
-//                        Subject materia = new Subject(nombreMateria);
-//
-//                        // Crear el objeto Historial
-//                        Historial historial = new Historial();
-//                        historial.setEstudiante(estudiante);
-//                        historial.setSemestre(semestre);
-//                        historial.setMateria(materia);
-//                        historial.setNotaMateria(nota);
-//                        historial.setEstadoMateria(nota >= 3.0 ? "APROBADA" : "PERDIDA");  // Lógica simple para definir estado
-//
-//                        historiales.add(historial);  // Agregar el historial a la lista
-//                    }
-//
-//                    // Ahora, enviar estudiante, semestre e historiales al servidor
-//                    // Aquí puedes usar tu servicio HTTP para enviar los datos
-//                    studentService.save(estudiante);  // Guardar el estudiante en la BD
-//                    semesterService.save(semestre);  // Guardar el semestre
-//                    historialService.saveAll(historiales);  // Guardar el historial de materias del estudiante
+                        // Crear el objeto Semestre
+                        Student student1 = studentService.getByCedula(student.getCedula()); // Guardar el estudiante en el servicio
+                        Semester semestre = new Semester(-1, student1, nivel, periodo, promedioPeriodo, promedioFinal, cantidadAsignaturas, cantidadCreditos);
+                        semesterService.add(semestre);
+
+                        // Crear el objeto Historial
+                        Historial historial = new Historial();
+                        historial.setId(0);
+                        historial.setStudent(student1);
+
+                        List<Semester> semesterList = new ArrayList<>(semesterService.get());
+                        Semester semester = semesterList.stream()
+                                .filter(s -> s.getStudent().getCedula().equals(student1.getCedula()))
+                                .findFirst()
+                                .orElse(null);
+
+                        historial.setSemester(semester);
+                        // Bucle para leer las notas de las materias
+                        for (int j = 10; j < excelService.getColumnCount(); j++) { // Empezar desde la columna 10
+                            // Obtener el nombre de la materia desde la fila 0
+                            String nombreMateria = excelService.getCellData(0, j); // Fila 0, columna j
+                            String subjectData = excelService.getCellData(i, j); // Obtener la nota de la celda correspondiente
+                            String estado = subjectData.split("\\(")[0].trim(); // Obtener la parte antes del paréntesis
+                            System.out.println("ESTADO  " + estado);
+                            String notaStr = subjectData.replaceAll("[^0-9.]", "").trim();
+                            System.out.println("NOTA  " + notaStr);
+                            // Obtener la materia desde el servicio
+                            System.out.println(nombreMateria.replaceAll(" ", "-"));
+
+                            Subject subject = subjectList.stream()
+                                    .filter(s -> s.getName().equalsIgnoreCase(nombreMateria))
+                                    .findFirst()
+                                    .orElse(null);
+
+                            // Si la materia existe, agregar la nota al historial
+                            if (subject != null) {
+                                historial.setSubject(subject);
+                                if (estado.isEmpty() || notaStr.isBlank()) {
+                                    estado = "No cursada";
+                                }
+                                if(subjectData.isEmpty()) {
+                                    estado = "No cursada";
+                                    notaStr = "0.0";
+                                }
+                                if(notaStr.isEmpty()) {
+                                    notaStr = "0.0";
+                                }
+                                historial.setEstadoMateria(estado);
+                                System.out.println("NOTA -> " + notaStr);
+                                historial.setSubjectGrade(Double.parseDouble(notaStr)); // Asumiendo que tienes un método para agregar notas en el historial
+
+                                System.out.println("Nota para " + nombreMateria + " de " + nombres + " " + apellidos + ": " + estado + "  " + notaStr);
+                            } else {
+                                System.out.println("Materia no encontrada: " + nombreMateria);
+                            }
+                        }
+                        historialService.add(historial);
                     }
-                /*
-                // Procesar los estudiantes (fila 1 en adelante) // TODO
-                for (int i = 1; i < 10; i++) {  // Las primeras 10 filas contienen datos de estudiantes
-                    String nombres = excelService.getCellData(i, 0);   // Columna 0: Nombres
-                    String apellidos = excelService.getCellData(i, 1); // Columna 1: Apellidos
-                    String jornada = excelService.getCellData(i, 2);   // Columna 2: Jornada
-                    String estadoEstudiante = excelService.getCellData(i, 3); // Columna 3: Estado del estudiante
-                    long cedula = Long.parseLong(excelService.getCellData(i, 4));    // Columna 4: Cédula
-
-                    // Crear el objeto estudiante con los datos obtenidos
-                    Student estudiante = new Student(nombres, apellidos, cedula, jornada, estadoEstudiante);
-
-                    // Procesar el estudiante o guardarlo en la base de datos
-                    // por ejemplo: estudianteService.save(estudiante);
-                }
-                excelService.uploadData();
-                 */
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -189,7 +205,8 @@ public class OpenFileView implements Initializable {
             }
         };
         loadingAlert.show();
-        new Thread(task).start();
+        Thread thread = new Thread(task);
+        thread.start();
     }
 
     @FXML
@@ -201,3 +218,39 @@ public class OpenFileView implements Initializable {
         }
     }
 }
+
+/*
+
+for (int i = 1; i < excelService.getRowCount(); i++) {
+                        for(int j = 0; j < excelService.getColumnCount(); j++) {
+                            String nombres = excelService.getCellData(i, 0);    // Columna 0: Nombres
+                            String apellidos = excelService.getCellData(i, 1);  // Columna 1: Apellidos
+                            long cedula = Long.parseLong(excelService.getCellData(i, 2));   // Columna 2: Cédula
+                            String jornada = excelService.getCellData(i, 3);    // Columna 3: Jornada
+                            int nivel = RomanNumeralParser.romanToInt(excelService.getCellData(i, 4));  // Columna 4: Nivel
+                            String periodo = excelService.getCellData(i, 5);    // Columna 5: Período
+                            int cantidadAsignaturas = (int) Double.parseDouble(excelService.getCellData(i, 6));  // Columna 6
+                            int cantidadCreditos = (int) Double.parseDouble(excelService.getCellData(i, 7));     // Columna 7
+                            double promedioPeriodo = Double.parseDouble(excelService.getCellData(i, 8)); // Columna 8
+                            double promedioFinal = Double.parseDouble(excelService.getCellData(i, 9));   // Columna 9
+
+                            Student student = new Student(0, nombres, apellidos, cedula, jornada, "ACTIVO");
+
+                            // Crear el objeto Semestre
+                            Semester semestre = new Semester();
+                            semestre.setStudent(student);
+                            semestre.setNivel(nivel);
+                            semestre.setPeriodo(periodo);
+                            semestre.setCantidadAsignaturas(cantidadAsignaturas);
+                            semestre.setCantidadCreditos(cantidadCreditos);
+                            semestre.setPromedioPeriodo(promedioPeriodo);
+                            semestre.setPromedioFinal(promedioFinal);
+
+                            studentService.add(student);
+
+                            Subject subject = subjectService.getByName(excelService.getCellData(0, 10));
+
+                            Historial historial = new Historial(0, student, semestre, subject, 0.0, "");
+                        }
+                    }
+ */

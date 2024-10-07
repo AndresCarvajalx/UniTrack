@@ -24,4 +24,8 @@ public class StudentService {
     public void add(Student student) {
         api.add(path, student);
     }
+
+    public Student getByCedula(Long cedula) {
+        return api.get(path + cedula, Student.class);
+    }
 }
